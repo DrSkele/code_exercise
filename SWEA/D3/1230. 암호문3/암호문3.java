@@ -98,9 +98,7 @@ class Solution
         }
 
         public void add(int value){
-            Node newNode = nodePool[pointer++];
-            newNode.value = value;
-            newNode.next = null;
+            Node newNode = new Node(value);
             if(head.next == null){
                 head.next = newNode;
                 tail = newNode;
