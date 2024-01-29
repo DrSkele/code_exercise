@@ -2,58 +2,80 @@ import java.io.*;
 import java.util.*;
 
 class Main{
-    public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer tokens = new StringTokenizer(reader.readLine());
-        int nodes = Integer.parseInt(tokens.nextToken());
-        int lines = Integer.parseInt(tokens.nextToken());
-        int start = Integer.parseInt(tokens.nextToken());
-        
-        boolean[][] map = new boolean[nodes+1][nodes+1];
-        
-        for(int t = 0; t < lines; t++){
-            tokens = new StringTokenizer(reader.readLine());
-            int first = Integer.parseInt(tokens.nextToken());
-            int second = Integer.parseInt(tokens.nextToken());
-            
-            map[first][second] = true;
-            map[second][first] = true;
-        }
-        //DFS
-        Stack<Integer> dfsQ = new Stack<>();
-        boolean[] visitedDFS = new boolean[nodes+1];
-        
-        dfsQ.push(start);
-        
-        while(!dfsQ.isEmpty()){
-            int cur = dfsQ.pop();
-            if(visitedDFS[cur]) continue;
-            else visitedDFS[cur] = true;
-            for(int i = nodes; i >= 0; i--){
-                if(map[cur][i] && !visitedDFS[i]){
-                    dfsQ.push(i);
-                }
-            }
-            System.out.print(cur + " ");
-        }
-        System.out.println();
-        
-        //BFS
-        Queue<Integer> bfsQ = new LinkedList<>();
-        boolean[] visitedBFS = new boolean[nodes+1];
-        
-        bfsQ.add(start);
-        
-        while(!bfsQ.isEmpty()){
-            int cur = bfsQ.poll();
-            for(int i = 0; i < nodes+1; i++){
-                if(map[cur][i] && !visitedBFS[i]){
-                    bfsQ.add(i);
-                    visitedBFS[i] = true;
-                }
-            }
-            visitedBFS[cur] = true;
-            System.out.print(cur + " ");
-        }
-    }
+	static TreeMap<Integer, TreeSet<Integer>> map;
+	static boolean[] visited;
+	
+	static StringBuilder str;
+	
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		str = new StringBuilder();
+		
+		int vertex = sc.nextInt();
+		int line = sc.nextInt();
+		int start = sc.nextInt();
+		
+		map = new TreeMap<>();
+		visited = new boolean[vertex+1];
+		
+		for(int i = 0; i < line; i++) {
+			int v1 = sc.nextInt();
+			int v2 = sc.nextInt();
+			
+			put(v1, v2);
+			put(v2, v1);
+		}
+		if(map.containsKey(start)) {
+			dfs(start);
+			for(int i = 0; i < vertex+1; i++) {
+				visited[i] = false;
+			}
+			str.append("\n");
+			bfs(start);
+		} else {
+			str.append(start).append("\n").append(start);
+		}
+		System.out.println(str.toString());
+	}
+	
+	static void put(int first, int second) {
+		if(map.containsKey(first)) {
+			TreeSet<Integer> set = map.get(first);
+			set.add(second);
+			map.put(first, set);
+		} else {
+			TreeSet<Integer> set = new TreeSet<>();
+			set.add(second);
+			map.put(first, set);
+		}
+	}
+	
+	static void bfs(int start) {
+		
+		Queue<Integer> q = new LinkedList<>();
+		
+		q.add(start);
+		visited[start] = true;
+		
+		while(!q.isEmpty()) {
+			int cur = q.poll();
+			str.append(cur).append(" ");
+			
+			for(int next : map.get(cur)) {
+				if(visited[next]) continue;
+				q.add(next);
+				visited[next] = true;
+			}
+		}
+	}
+	
+	static void dfs(int node) {
+		visited[node] = true;
+		str.append(node).append(" ");
+		
+		for(int next : map.get(node)) {
+			if(visited[next]) continue;
+			dfs(next);
+		}
+	}
 }
