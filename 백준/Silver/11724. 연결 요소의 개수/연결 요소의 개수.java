@@ -27,7 +27,7 @@ class Main{
         for(int i = 0; i < vertex; i++){
             if(visited[i]) continue;
             cnt++;
-            for(int j = 0; j < vertex; j++){
+            for(int j = i+1; j < vertex; j++){
                 if(map[i][j] || map[j][i]){
                     q.add(i);
                     while(!q.isEmpty()){
