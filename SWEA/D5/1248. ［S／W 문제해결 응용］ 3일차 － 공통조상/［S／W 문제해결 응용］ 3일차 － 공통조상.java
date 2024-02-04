@@ -35,7 +35,7 @@ class Solution
 			
 			int[] subTree = new int[vertex+1];
 			
-			dfs(1, child, subTree);
+			
 			
 			int parent1 = target1;
 			int parent2 = target2;
@@ -64,6 +64,8 @@ class Solution
 					visited[parent2] = true;					
 				}
 			}
+            
+            dfs(sharedParent, child, subTree);
 			
 			System.out.println(String.format("#%d %d %d", test_case, sharedParent, subTree[sharedParent]));
 		}
