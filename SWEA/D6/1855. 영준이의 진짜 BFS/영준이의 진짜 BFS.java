@@ -41,12 +41,12 @@ class Solution{
         }
     }
     
-    static void fillParent() {
-    	for(int i = 1; i < 20; i++) {
-    		for(int j = 1; j < length+1; j++) {
-    			parent[j][i] = parent[parent[j][i-1]][i-1];
-    		}
-    	}
+    static void fillParent(){
+    	for(int i = 1; i < 20; i++){
+        	for(int j = 1; j < length+1; j++){
+            	parent[j][i] = parent[parent[j][i-1]][i-1];
+            }
+        }
     }
     
     static long bfs(int node) {
@@ -76,31 +76,30 @@ class Solution{
     	return sum;
     }
     
-    static int LCA(int v1, int v2) {
-    	if(depth[v1] != depth[v2]) {
-    		if(depth[v1] > depth[v2]) {
-    			int temp = v1;
-    			v1 = v2;
-    			v2 = temp;
-    		}
-    		
-    		for(int i = 19; i >= 0; i--) {
-    			if(depth[v1] <= depth[parent[v2][i]]) {
-    				v2 = parent[v2][i];
-    			}
-    		}
-    	}
-    	
-    	
-    	if(v1 != v2) {
-    		for(int i = 19; i >= 0; i--) {
-    			if(parent[v1][i] != parent[v2][i]) {
-    				v1 = parent[v1][i];
-    				v2 = parent[v2][i];
-    			}
-    		}
-    		return parent[v1][0];
-    	}
-    	return v1;
+    static int LCA(int v1, int v2){
+    	if(depth[v1] > depth[v2]){
+        	int temp = v1;
+            v1 = v2;
+            v2 = temp;
+        }
+        
+        if(depth[v2] > depth[v1]){
+        	for(int i = 19; i >= 0; i--){
+                if(depth[v1] <= depth[parent[v2][i]]){
+                	v2 = parent[v2][i];
+                }
+            }
+        }
+        
+        if(v1 != v2){
+        	for(int i = 19; i >= 0; i--){
+            	if(parent[v1][i] != parent[v2][i]){
+                	v1 = parent[v1][i];
+                    v2 = parent[v2][i];
+                }
+            }
+            return parent[v1][0];
+        }
+        return v1;
     }
 }
