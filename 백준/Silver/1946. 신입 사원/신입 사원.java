@@ -6,6 +6,7 @@ public class Main {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(in.readLine());
 		StringTokenizer tokens;
+        StringBuilder str = new StringBuilder();
 		
 		for(int t = 1; t < T+1; t++) {
 			int n = Integer.parseInt(in.readLine()); 
@@ -35,7 +36,9 @@ public class Main {
 				prevScore = scores[i];
 			}
 			
-			System.out.println(set.size());
+            str.append(set.size()).append("\n");
+			//System.out.println(set.size());
 		}
+        System.out.println(str.toString());
 	}
 }
