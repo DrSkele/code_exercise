@@ -36,22 +36,21 @@ public class Main {
 		int goal = arr[idx];
 		
 		while(left < right) {
-			if(left == idx) {
-				left += 1;
-				continue;
-			}
-			if(right == idx) {
-				right -= 1;
-				continue;
-			}
-			
 			int sum = arr[left] + arr[right];
 			if(sum < goal) {
 				left += 1;
 			} else if (sum > goal){
 				right -= 1;
 			} else {
-				return true;
+				if(left == idx) {
+					left += 1;
+					continue;
+				} else if(right == idx) {
+					right -= 1;
+					continue;
+				} else {					
+					return true;
+				}
 			}
 		}
 		return false;
