@@ -71,6 +71,7 @@ public class Main {
 			Path cur = pq.poll();
 			
 			if(!map.containsKey(cur.end)) continue;
+            if(visited[cur.end] < cur.weight) continue;
 			
 			for(Path path : map.get(cur.end)) {
 				int newWeight = visited[cur.end] + path.weight;
