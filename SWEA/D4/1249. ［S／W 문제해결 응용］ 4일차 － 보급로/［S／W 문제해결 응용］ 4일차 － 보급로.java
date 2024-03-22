@@ -43,29 +43,41 @@ public class Solution {
 	static final int[] dy = { 0, +1, 0, -1 };
 	static void bfs(int sx, int sy) {
 		
-		ArrayDeque<int[]> q = new ArrayDeque<>();
+		PriorityQueue<Path> q = new PriorityQueue<Path>(Comparator.comparing(Path::getLength));
 		
-		q.add(new int[] {sx, sy});
+		q.add(new Path(sx, sy, 0));
 		visited[sy][sx] = 0;
 		
 		while(!q.isEmpty()) {
-			int[] cur = q.poll();
-			int x = cur[0];
-			int y = cur[1];
-			int val = visited[y][x];
+			Path cur = q.poll();
+			if(cur.x == size-1 && cur.y == size-1) break;
+			int val = visited[cur.y][cur.x];
 			
 			for(int i = 0; i < 4; i++) {
-				int nx = x + dx[i];
-				int ny = y + dy[i];
+				int nx = cur.x + dx[i];
+				int ny = cur.y + dy[i];
 				if(nx < 0 || nx >= size || ny < 0 || ny >= size) continue;
 				
 				int nVal = visited[ny][nx];
 				int addVal = matrix[ny][nx];
 				if(nVal != -1 && val + addVal >= nVal) continue;
 				
-				q.add(new int[] {nx, ny});
+				q.add(new Path(nx, ny, val + addVal));
 				visited[ny][nx] = val + addVal;
 			}
 		}
+	}
+	
+	static class Path{
+		int x;
+		int y;
+		int length;
+		public Path(int x, int y, int length) {
+			this.x = x;
+			this.y = y;
+			this.length = length;
+		}
+		
+		public int getLength() {return length;}
 	}
 }
