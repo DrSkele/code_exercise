@@ -56,37 +56,39 @@ public class Main {
 		int min = Integer.MAX_VALUE;
 		
 		int oneToStop1 = dijkstra(1, stopby1);
-		boolean passedStop2 = passedby(1, stopby1, stopby2);
+		//boolean passedStop2 = passedby(1, stopby1, stopby2);
 		
 		int oneToStop2 = dijkstra(1, stopby2);
-		boolean passedStop1 = passedby(1, stopby2, stopby1);
+		//boolean passedStop1 = passedby(1, stopby2, stopby1);
 		
 		int stopToStop = dijkstra(stopby1, stopby2);
 		
 		int stop1ToN = dijkstra(stopby1, vertex);
-		boolean throughStop2 = passedby(stopby1, vertex, stopby2);
+		//boolean throughStop2 = passedby(stopby1, vertex, stopby2);
 		
 		int stop2ToN = dijkstra(stopby2, vertex);
-		boolean throughStop1 = passedby(stopby2, vertex, stopby1);
+		//boolean throughStop1 = passedby(stopby2, vertex, stopby1);
 		
-		if(passedStop2) {
-			min = Math.min(min, oneToStop1 + stop1ToN);
-		} else {
-			if(throughStop2) {
-				min = Math.min(min, oneToStop1 + stop1ToN);
-			} else {
-				min = Math.min(min, oneToStop1 + stopToStop + stop2ToN);
-			}
-		}
-		if(passedStop1) {
-			min = Math.min(min, oneToStop2 + stop2ToN);
-		} else {
-			if(throughStop1) {
-				min = Math.min(min, oneToStop2 + stop2ToN);
-			} else {
-				min = Math.min(min, oneToStop2 + stopToStop + stop1ToN);
-			}
-		}
+//		if(passedStop2) {
+//			min = Math.min(min, oneToStop1 + stop1ToN);
+//		} else {
+//			if(throughStop2) {
+//				min = Math.min(min, oneToStop1 + stop1ToN);
+//			} else {
+//				min = Math.min(min, oneToStop1 + stopToStop + stop2ToN);
+//			}
+//		}
+//		if(passedStop1) {
+//			min = Math.min(min, oneToStop2 + stop2ToN);
+//		} else {
+//			if(throughStop1) {
+//				min = Math.min(min, oneToStop2 + stop2ToN);
+//			} else {
+//				min = Math.min(min, oneToStop2 + stopToStop + stop1ToN);
+//			}
+//		}
+		
+		min = Math.min(oneToStop1 + stopToStop + stop2ToN, oneToStop2 + stopToStop + stop1ToN);
 		System.out.println(min >= INF ? -1 : min);
 	}
 	
