@@ -19,8 +19,7 @@ int solution(int temperature, int t1, int t2, int a, int b, int onboard[], size_
     // step02. 초기값 설정
     dp[temperature + correction_value][0] = 0;
     
-    
-    // step03. 방향 설정
+    // step03. 방향 설정 (-1: 온도 낮춰야함. 1 : 온도 높여야함.)
     if(t2 <= temperature)
         direction = -1;
     else
@@ -62,6 +61,7 @@ int solution(int temperature, int t1, int t2, int a, int b, int onboard[], size_
         }
     }
     
+    // step05. 정답 추출 
     if(onboard[onboard_len - 1] == 1){
         for(int j = t1 + correction_value; j <= t2 + correction_value; j++){
             if(dp[j][onboard_len - 1] < answer)
