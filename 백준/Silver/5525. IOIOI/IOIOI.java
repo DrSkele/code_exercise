@@ -3,8 +3,6 @@ import java.util.*;
 
 public class Main {
 
-	// 행렬 제곱 = A*A*A = (A*A)*A
-	
     public static void main(String[] args) throws IOException {
     	BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     	
@@ -15,33 +13,27 @@ public class Main {
 
     static int N;
     static int len;
-    static String ref;
-    static String line;
+    static char[] line;
     static void init(BufferedReader in) throws IOException {
     	N = Integer.parseInt(in.readLine());
     	len = Integer.parseInt(in.readLine());
-    	
-    	StringBuilder str = new StringBuilder();
-    	str.append("I");
-    	for(int i = 0; i < N; i++) {
-    		str.append("OI");
-    	}
-    	ref = str.toString();
-    	line = in.readLine();
+    	line = in.readLine().toCharArray();
     }
 
     static void solve(){
-    	StringBuilder str = new StringBuilder();
-    	
-    	for(int i = 0; i < ref.length(); i++) {
-    		str.append(line.charAt(i));
-    	}
-    	int cnt = str.toString().equals(ref) ? 1 : 0;
-    	for(int i = 0; i < line.length()-ref.length(); i++) {
-    		str.deleteCharAt(0);
-    		str.append(line.charAt(ref.length()+i));
-    		
-    		if(str.toString().equals(ref)) cnt++;
+    	int cnt = 0;
+    	int[] streak = new int[line.length];
+    	int i = 0;
+    	while(i < line.length) {
+    		if(line[i] == 'I') {
+    			if(streak[i] >= N) cnt++;
+    			if(i+2 < line.length && line[i+1] == 'O' && line[i+2] == 'I') {
+    				streak[i+2] = streak[i] + 1;
+    				i+=2;
+    				continue;
+    			}
+    		} 
+    		i++;
     	}
     	System.out.println(cnt);
     }
