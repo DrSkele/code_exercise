@@ -25,7 +25,9 @@ class Main{
 
     static void solve(){
     	for(Point point : points) {
-    		System.out.println(point.x + " " + point.y);
+    		StringBuilder str = new StringBuilder();
+    		str.append(point.x).append(" ").append(point.y);
+    		System.out.println(str.toString());
     	}
     }
     
