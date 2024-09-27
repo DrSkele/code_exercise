@@ -4,7 +4,7 @@ class Solution {
         int answer = 0;
         
         PriorityQueue<Integer> pq = new PriorityQueue<>(Collections.reverseOrder());
-        ArrayDeque<Process> processes = new ArrayDeque<>();
+        Queue<Process> processes = new LinkedList<>();
         
         for(int i = 0; i < priorities.length; i++){
             pq.add(priorities[i]);
