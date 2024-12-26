@@ -13,7 +13,6 @@ class Main{
 	static int length;
 	static int[] arr;
 	static int[] temp;
-	static Set<String> visited;
 	static List<String> answer;
 	static void input(BufferedReader in) throws IOException {
 		StringTokenizer tokens = new StringTokenizer(in.readLine());
@@ -25,7 +24,6 @@ class Main{
 			arr[i] = Integer.parseInt(tokens.nextToken());
 		}
 		temp = new int[length];
-		visited = new HashSet<>();
 		answer = new ArrayList<>();
 	}
 	
@@ -47,10 +45,7 @@ class Main{
 			for(int i = 0; i < temp.length; i++) {
 				str.append(temp[i]).append(" ");
 			}
-			if(!visited.contains(str.toString())) {
-				visited.add(str.toString());
-				answer.add(str.toString());
-			}
+			answer.add(str.toString());
 			return;
 		}
 		if(idx >= size) return;
@@ -59,6 +54,5 @@ class Main{
 			temp[arrSize] = arr[i];
 			iterate(idx+1, arrSize+1);
 		}
-		iterate(idx+1, arrSize);
 	}
 }
