@@ -14,6 +14,7 @@ class Main{
 	static int[] arr;
 	static int[] temp;
 	static List<String> answer;
+	static StringBuilder str;
 	static void input(BufferedReader in) throws IOException {
 		StringTokenizer tokens = new StringTokenizer(in.readLine());
 		size = Integer.parseInt(tokens.nextToken());
@@ -25,6 +26,7 @@ class Main{
 		}
 		temp = new int[length];
 		answer = new ArrayList<>();
+		str = new StringBuilder();
 	}
 	
 	static void solve() {
@@ -32,20 +34,15 @@ class Main{
 		
 		iterate(0, 0);
 		
-		StringBuilder str = new StringBuilder();
-		for(String next : answer) {
-			str.append(next).append("\n");
-		}
 		System.out.println(str.toString());
 	}
 	
 	static void iterate(int idx, int arrSize) {
 		if(arrSize == length) {
-			StringBuilder str = new StringBuilder();
 			for(int i = 0; i < temp.length; i++) {
 				str.append(temp[i]).append(" ");
 			}
-			answer.add(str.toString());
+			str.append("\n");
 			return;
 		}
 		if(idx >= size) return;
