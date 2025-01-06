@@ -2,37 +2,62 @@ import java.io.*;
 import java.util.*;
 
 class Main{
-    public static void main(String[] args) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer tokens = new StringTokenizer(in.readLine());
-        int numOfHouse = Integer.parseInt(tokens.nextToken());
-        int lan = Integer.parseInt(tokens.nextToken());
-        int[] houses = new int[numOfHouse];
-        for(int i =0;i< numOfHouse; i++){
-            tokens = new StringTokenizer(in.readLine());
-            houses[i] = Integer.parseInt(tokens.nextToken());
-        }
-        Arrays.sort(houses);
-        int dist = (houses[numOfHouse-1] - houses[0]);
-        
-        
-        int top = dist;
-        int bottom = 0;
-        
-        while(bottom <= top){
-            int mid = (top+bottom)/2;
-            int lastPlaced = houses[0];
-            int cnt = 1;
-            for(int j = 1; j<numOfHouse; j++){
-                int between = houses[j]-lastPlaced;
-                if(between >= mid){
-                    cnt++;
-                    lastPlaced = houses[j];
-                }
-            }
-            if(cnt >= lan) bottom = mid+1;
-            else top = mid-1;
-        }
-        System.out.println(top);
-    }
+	static StringBuilder str;
+	public static void main(String[] args) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		input(in);
+		solve();		
+	}
+	
+	static int house;
+	static int wifi;
+	static int[] houses;
+	static void input(BufferedReader in) throws IOException {
+		StringTokenizer tokens = new StringTokenizer(in.readLine());
+		house = Integer.parseInt(tokens.nextToken());
+		wifi = Integer.parseInt(tokens.nextToken());
+		
+		houses = new int[house];
+		
+		for(int i = 0; i < house; i++) {
+			int dist = Integer.parseInt(in.readLine());
+			houses[i] = dist;
+		}
+		
+		Arrays.sort(houses);
+	}
+	
+	static void solve() {
+		System.out.println(findLongest());
+	}
+	
+	static int findLongest() {
+		int result = 0;
+		int left = 0;
+		int right = houses[houses.length - 1] - houses[0];
+		
+		while(left <= right) {
+			int mid = left + (right - left)/2;
+			
+			int cnt = 1;
+			int prevWifiIdx = 0;
+			for(int i = 1; i < houses.length; i++) {
+				int distBetween = houses[i] - houses[prevWifiIdx];
+				if(distBetween >= mid) {
+					cnt++;
+					prevWifiIdx = i;
+				}
+			}
+			
+			if(cnt >= wifi) {
+				left = mid + 1;
+				result = mid;
+			} else {
+				right = mid - 1;
+			}
+		}
+		
+		return result;
+	}
 }
