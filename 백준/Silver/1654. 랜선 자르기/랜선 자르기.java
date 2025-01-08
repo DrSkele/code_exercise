@@ -2,51 +2,59 @@ import java.io.*;
 import java.util.*;
 
 class Main{
-    static int[] cables;
-    static int ownes;
-    static int need;
-    public static void main(String[] args) throws IOException {
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer tokens = new StringTokenizer(in.readLine());
-        ownes = Integer.parseInt(tokens.nextToken());
-        need = Integer.parseInt(tokens.nextToken());
-        
-        cables = new int[ownes];
-        
-        for(int i =0;i < ownes; i++){
-            tokens = new StringTokenizer(in.readLine());
-            cables[i] = Integer.parseInt(tokens.nextToken());
-        }
-        Arrays.sort(cables);
-        
-        long last = cables[ownes-1] > 1_000_000 ? 1_000_000 : cables[ownes-1];
-        
-        System.out.print(cutCables(1, cables[ownes-1]));
-    }
-    
-    static long cutCables(long start, long end){
-        
-        long mid = (start+end)/2;
-        
-        if(start > end) return mid;
-        
-        int cut = getNumber(mid);
-        
-        if(cut < need){
-            return cutCables(start, mid-1);
-        } else {
-            return cutCables(mid+1, end);
-        } 
-    }
-    
-    static int getNumber(long length){
-        
-        int cnt = 0;
-        
-        for(int i = 0; i < ownes; i++){
-            cnt += cables[i]/length;    
-        }
-        
-        return cnt;
-    }
+	static StringBuilder str;
+	public static void main(String[] args) throws IOException {
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		input(in);
+		solve();		
+	}
+	
+	static int numOfCable;
+	static int required;
+	static long[] cables;
+	static long maxLength;
+	static void input(BufferedReader in) throws IOException {	
+		StringTokenizer tokens = new StringTokenizer(in.readLine());
+		numOfCable = Integer.parseInt(tokens.nextToken());
+		required = Integer.parseInt(tokens.nextToken());
+		
+		cables = new long[numOfCable];
+		maxLength = 0;
+		for(int i = 0; i < numOfCable; i++) {
+			cables[i] = Long.parseLong(in.readLine());
+			maxLength = Math.max(maxLength, cables[i]);
+		}
+	}
+	
+	static void solve() {
+		System.out.println(findUpperBound());
+	}
+	
+	static long findUpperBound() {
+		long result = 0;
+		long left = 1;
+		long right = maxLength;
+		
+		while(left <= right) {
+			long mid = left + (right - left)/2;
+			
+			if(countCables(mid) >= required) {
+				result = mid;
+				left = mid + 1;
+			} else {
+				right = mid - 1;
+			}
+		}
+		
+		return result;
+	}
+	
+	static int countCables(long length) {
+		int cnt = 0;
+		for(int i = 0; i < cables.length; i++) {
+			cnt += cables[i] / length;
+		}
+		return cnt;
+	}
 }
