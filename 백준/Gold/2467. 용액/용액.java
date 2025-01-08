@@ -1,65 +1,54 @@
 import java.io.*;
 import java.util.*;
 
-public class Main {
-
+class Main{
 	public static void main(String[] args) throws IOException {
-		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		
-		init(in);
-		
-		solve();
-	}
-	
-	static int N;
-	static int[] liquid;
-	static StringTokenizer tokens;
-	
-	static int min;
-	static int minAcid;
-	static int minAlkali;
-	static void init(BufferedReader in) throws IOException{
-		N = Integer.parseInt(in.readLine());
-		liquid = new int[N];
-		tokens = new StringTokenizer(in.readLine());
-		min = Integer.MAX_VALUE;
-		for(int i = 0; i < N; i++) {
-			liquid[i] = Integer.parseInt(tokens.nextToken());
-		}
-	}
-	
-	static void solve() {
-		int left = 0;
-		int right = N-1;
-		while(left < right) {
-			int onLeft = liquid[left];
-			int onRight = liquid[right];
-			int mix = Math.abs(onRight + onLeft);
-			
-			if(mix < min) {
-				min = mix;
-				minAcid = onLeft;
-				minAlkali = onRight;
-			}
-			
-			if(left + 1 < right && left < right - 1 ) {
-				int mixLeft = Math.abs(onRight + liquid[left+1]);
-				int mixRight = Math.abs(onLeft + liquid[right-1]);
-				
-				if(mixLeft < mixRight) {
-					left = left + 1;
-				} else if(mixRight < mixLeft) {
-					right = right -1;
-				} else {
-					left = left + 1;
-					right = right -1;
-				}
-			} else break;
-		}
-		
-		System.out.println(minAcid + " " + minAlkali);
-	}
-	
+
+        //산성용액 : 1~1억
+        //알칼리성 : -1~-1억
+
+        //두 용액 혼합 -> 특성값의 합
+        //두 용액을 혼합해 특성값이 0에 가장 가까운 용액 만들기 !
+
+        int[] answer = new int[2];
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        int n = Integer.parseInt(reader.readLine());
+        int[] liquid = new int[n];
+
+        StringTokenizer st = new StringTokenizer(reader.readLine());
+
+        for (int i=0; i<n; i++) {
+            liquid[i] = Integer.parseInt(st.nextToken());
+        }
+
+        Arrays.sort(liquid);
+        int max = Integer.MAX_VALUE;
+
+        for (int i=0; i<n; i++) {
+            int start = i+1;
+            int end = n-1;
+            while (start <= end) {
+                int mid = (start+end)/2;
+
+                int sum = liquid[i] + liquid[mid];
+
+                if (Math.abs(sum) < max) {
+                    answer[0] = liquid[i];
+                    answer[1] = liquid[mid];
+                    max = Math.abs(sum);
+                }
+
+                if (sum < 0) {
+                    start = mid+1;
+                } else {
+                    end = mid-1;
+                }
+            }
+        }
+
+        System.out.println(answer[0] + " " + answer[1]);
+
+    }
 }
-
-
