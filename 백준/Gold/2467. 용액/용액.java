@@ -29,28 +29,26 @@ class Main{
 	}
 	
 	static void solve() {
-		for(int i = 0; i < length; i++) {
-			int left = i + 1;
-			int right = length - 1;
+		
+		int left = 0;
+		int right = length - 1;
+		
+		while(left < right) {
+			int sum = solutions[left] + solutions[right];
 			
-			while(left <= right) {
-				int mid = (left + right)/2;
-				
-				int sum = solutions[i] + solutions[mid];
-				
-				if(Math.abs(sum) < min) {
-					min = Math.abs(sum);
-					first = i;
-					second = mid;
-				}
-				
-				if(sum < 0) {
-					left = mid + 1;
-				} else {
-					right = mid - 1;
-				}
+			if(Math.abs(sum) < min) {
+				min = Math.abs(sum);
+				first = left;
+				second = right;
+			}
+			
+			if(sum > 0) {
+				right--;
+			} else {
+				left++;
 			}
 		}
+		
 		System.out.println(solutions[first] + " " + solutions[second]);
 	}
 }
