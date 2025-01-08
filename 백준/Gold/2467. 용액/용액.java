@@ -2,53 +2,55 @@ import java.io.*;
 import java.util.*;
 
 class Main{
+	static StringBuilder str;
 	public static void main(String[] args) throws IOException {
-
-        //산성용액 : 1~1억
-        //알칼리성 : -1~-1억
-
-        //두 용액 혼합 -> 특성값의 합
-        //두 용액을 혼합해 특성값이 0에 가장 가까운 용액 만들기 !
-
-        int[] answer = new int[2];
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
-        int n = Integer.parseInt(reader.readLine());
-        int[] liquid = new int[n];
-
-        StringTokenizer st = new StringTokenizer(reader.readLine());
-
-        for (int i=0; i<n; i++) {
-            liquid[i] = Integer.parseInt(st.nextToken());
-        }
-
-        Arrays.sort(liquid);
-        int max = Integer.MAX_VALUE;
-
-        for (int i=0; i<n; i++) {
-            int start = i+1;
-            int end = n-1;
-            while (start <= end) {
-                int mid = (start+end)/2;
-
-                int sum = liquid[i] + liquid[mid];
-
-                if (Math.abs(sum) < max) {
-                    answer[0] = liquid[i];
-                    answer[1] = liquid[mid];
-                    max = Math.abs(sum);
-                }
-
-                if (sum < 0) {
-                    start = mid+1;
-                } else {
-                    end = mid-1;
-                }
-            }
-        }
-
-        System.out.println(answer[0] + " " + answer[1]);
-
-    }
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		
+		input(in);
+		solve();		
+	}
+	
+	static int length;
+	static int[] solutions;
+	static int min;
+	static int first;
+	static int second;
+	static void input(BufferedReader in) throws IOException {	
+		length = Integer.parseInt(in.readLine());
+		solutions = new int[length];
+		StringTokenizer tokens = new StringTokenizer(in.readLine());
+		for(int i = 0; i < length; i++) {
+			solutions[i] = Integer.parseInt(tokens.nextToken());
+		}
+		
+		first = 0;
+		second = 0;
+		min = Integer.MAX_VALUE;
+	}
+	
+	static void solve() {
+		for(int i = 0; i < length; i++) {
+			int left = i + 1;
+			int right = length - 1;
+			
+			while(left <= right) {
+				int mid = (left + right)/2;
+				
+				int sum = solutions[i] + solutions[mid];
+				
+				if(Math.abs(sum) < min) {
+					min = Math.abs(sum);
+					first = i;
+					second = mid;
+				}
+				
+				if(sum < 0) {
+					left = mid + 1;
+				} else {
+					right = mid - 1;
+				}
+			}
+		}
+		System.out.println(solutions[first] + " " + solutions[second]);
+	}
 }
