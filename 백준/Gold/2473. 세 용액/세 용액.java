@@ -31,13 +31,13 @@ class Main{
 		for(int i = 0; i < solutions.length; i++) {
 			long first = solutions[i];
 			
-			int left = 0;
+			int left = i + 1;
 			int right = solutions.length - 1;
 			
 			while(left < right) {
 				long sum = first + solutions[left] + solutions[right];
 				
-				if(left != i && right != i && Math.abs(sum) < min) {
+				if(Math.abs(sum) < min) {
 					min = Math.abs(sum);
 					answer[0] = first;
 					answer[1] = solutions[left];
