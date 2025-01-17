@@ -13,65 +13,58 @@ public class Main {
 	
 	static int V;
 	static int E;
-	static ArrayList<Edge> edges;
-	static int[] leader;
+	static Map<Integer, List<Edge>> map;
+	static boolean[] visited;
+	static PriorityQueue<Edge> pq;
 	static void init(BufferedReader in) throws IOException{
 		StringTokenizer tokens = new StringTokenizer(in.readLine());
 		V = Integer.parseInt(tokens.nextToken());
 		E = Integer.parseInt(tokens.nextToken());
-		edges = new ArrayList<Edge>();
-		leader = new int[V];
-		for(int i = 0; i < V; i++) {
-			leader[i] = i;
-		}
+		map = new HashMap<>();
+		visited = new boolean[V];
+		pq = new PriorityQueue<>();
+		
 		for(int i = 0; i < E; i++) {
 			tokens = new StringTokenizer(in.readLine());
-			edges.add(new Edge(
-					Integer.parseInt(tokens.nextToken())-1,
-					Integer.parseInt(tokens.nextToken())-1,
-					Integer.parseInt(tokens.nextToken()))
-					);
+			int v1 = Integer.parseInt(tokens.nextToken())-1;
+			int v2 = Integer.parseInt(tokens.nextToken())-1;
+			int weight = Integer.parseInt(tokens.nextToken());
+			
+			if(!map.containsKey(v1)) map.put(v1, new ArrayList<Edge>());
+			if(!map.containsKey(v2)) map.put(v2, new ArrayList<Edge>());
+			
+			map.get(v1).add(new Edge(v2, weight));
+			map.get(v2).add(new Edge(v1, weight));
 		}
-		Collections.sort(edges);
 	}
 	
 	static void solve(BufferedReader in) throws IOException {
+		visited[0] = true;
+		for(Edge e : map.get(0)) {
+			pq.add(e);
+		}
 		int sum = 0;
-		for(int i = 0; i < E; i++) {
-			Edge cur = edges.get(i);
+		while(!pq.isEmpty()) {
+			Edge cur = pq.poll();
+			if(visited[cur.v]) continue;
 			
-			int leader1 = find(cur.v1);
-			int leader2 = find(cur.v2);
-			
-			if(leader1 == leader2) continue;
-			
-			union(leader1, leader2);
 			sum += cur.weight;
+			visited[cur.v] = true;
+			
+			for(Edge e : map.get(cur.v)) {
+				if(visited[e.v]) continue;
+				pq.add(e);
+			}
 		}
 		System.out.println(sum);
 	}
 	
-	static int find(int a) {
-		if(leader[a] == a) return a;
-		
-		return leader[a] = find(leader[a]);
-	}
-	
-	static void union(int a, int b) {
-		int leaderA = find(a);
-		int leaderB = find(b);
-		
-		leader[leaderB] = leaderA;
-	}
-	
 	static class Edge implements Comparable<Edge>{
-		public int v1;
-		public int v2;
+		public int v;
 		public int weight;
 		
-		public Edge(int v1, int v2, int weight) {
-			this.v1 = v1;
-			this.v2 = v2;
+		public Edge(int v, int weight) {
+			this.v = v;
 			this.weight = weight;
 		}
 		
@@ -79,7 +72,7 @@ public class Main {
 		public int compareTo(Edge e) {
 			int result = 0;
 			if(weight < e.weight) result = -1;
-			else if(weight > e.weight) result = 1;
+			else if (weight > e.weight) result = 1;
 			return result;
 		}
 	}
