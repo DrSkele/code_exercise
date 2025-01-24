@@ -1,67 +1,62 @@
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
-public class Main {
-	
+class Main{
+	static StringBuilder str;
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer tokens = new StringTokenizer(in.readLine());
 		
-		int tab = Integer.parseInt(tokens.nextToken());
-		int device = Integer.parseInt(tokens.nextToken());
-		
-		HashSet<Integer> pluged = new HashSet<>();
-		LinkedList<Device> plugedUntil = new LinkedList<>();
-		
-		Device[] own = new Device[device+1];
-		
-		int[] order = new int[device];
-		tokens = new StringTokenizer(in.readLine());
-		
-		for(int i = 0; i < device; i++) {
-			int curDevice = Integer.parseInt(tokens.nextToken());
-			order[i] = curDevice;
-			if(own[curDevice] == null) {
-				own[curDevice] = new Device(curDevice);
-			}
-			own[curDevice].use.add(i);
-		}
-		
-		int cnt = 0;
-		for(int i = 0; i < device; i++) {
-			Device curDevice = own[order[i]];
-			curDevice.use.poll(); //다음 사용기간으로 갱신
-			if(!pluged.contains(curDevice.serialNum)) { //꽂혀있지 않다면
-				if(pluged.size() >= tab) { //탭이 포화상태라면
-					Collections.sort(plugedUntil);
-					Device toRemove = plugedUntil.getFirst();
-					pluged.remove(toRemove.serialNum);
-					plugedUntil.remove(toRemove);
-					cnt++;
-				}
-				pluged.add(curDevice.serialNum);
-				plugedUntil.add(curDevice);
-			} 
-		}
-		System.out.println(cnt);
+		input(in);
+		solve();	
 	}
 	
-	static class Device implements Comparable<Device>{
-		int serialNum;
-		Queue<Integer> use = new LinkedList<>();
+	static int holes;
+	static int nDevice;
+	static int[] devices;
+	static void input(BufferedReader in) throws IOException {
+		StringTokenizer tokens = new StringTokenizer(in.readLine());
+		holes = Integer.parseInt(tokens.nextToken());
+		nDevice = Integer.parseInt(tokens.nextToken());
+		devices = new int[nDevice];
+		tokens = new StringTokenizer(in.readLine());
+		for(int i = 0; i < nDevice; i++) {
+			devices[i] = Integer.parseInt(tokens.nextToken());
+		}
+	}
+	
+	static void solve() {
+		int cnt = 0;
+		int[] dist = new int[nDevice+1];
+		Set<Integer> pluged = new HashSet<>();
+		for(int i = 0; i < nDevice; i++) {
+			int device = devices[i];
+			if(pluged.contains(device)) continue;
+			
+			if(pluged.size() < holes) {
+				pluged.add(device);
+			} else {
+				for(int n : pluged) {
+					dist[n] = 0;
+				}
+				for(int j = nDevice-1; j > i; j--) {
+					dist[devices[j]] = j-i;
+				}
+				int replace = 0;
+				for(int n : pluged) {
+					if(dist[n] == 0) {
+						replace = n; break;
+					} else if(dist[n] > dist[replace]) {
+						replace = n;
+					}
+				}
+				pluged.remove(replace);
+				pluged.add(device);
+				//System.out.println(replace);
+				cnt++;
+			}
+		}
 		
-		public Device(int serial) {
-			this.serialNum = serial;
-		}
-
-		@Override
-		public int compareTo(Device d) {
-			int result = 0;
-			int thisUntil = this.use.isEmpty()? Integer.MAX_VALUE : this.use.peek();
-			int otherUntil = d.use.isEmpty()? Integer.MAX_VALUE : d.use.peek();
-			if(thisUntil > otherUntil) result = -1; //다음 사용까지 남은 기간이 제일 긴 것을 먼저
-			else if(thisUntil < otherUntil) result = 1;
-			return result;
-		}
+		System.out.println(cnt);
 	}
 }
