@@ -1,60 +1,55 @@
 import java.io.*;
 import java.util.*;
+import java.util.Map.Entry;
 
-public class Main {
-
-	static int N;
-	static int[] arr;
-	static int[] asc;
-	static int[] desc;
-	static int max;
-
+class Main{
+	static StringBuilder str;
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-
-		init(in);
 		
-		solve();
-
-		System.out.println(max);
-		
+		input(in);
+		solve();	
 	}
-
-	static void init(BufferedReader in) throws IOException {
+	
+	static int length;
+	static int[] arr;
+	static void input(BufferedReader in) throws IOException {
+		length = Integer.parseInt(in.readLine());
+		arr = new int[length];
 		StringTokenizer tokens = new StringTokenizer(in.readLine());
-		N = Integer.parseInt(tokens.nextToken());
-		arr = new int[N];
-		asc = new int[N];
-		desc = new int[N];
-		max = 0;
-		
-		tokens = new StringTokenizer(in.readLine());
-		
-		for(int i = 0; i < N; i++) {
-			int cur =Integer.parseInt(tokens.nextToken());
-			asc[i] = 1;
-			arr[i] = cur;
-			for(int j = 0; j < i; j++) {
-				if(arr[j] < arr[i] && asc[i] < asc[j]+1) {
-					asc[i] = asc[j]+1;
-				}
-			}
+		for(int i = 0; i < length; i++) {
+			arr[i] = Integer.parseInt(tokens.nextToken());
 		}
 	}
 	
 	static void solve() {
-		for(int i = N-1; i >= 0; i--) {
-			desc[i] = 1;
-			for(int j = N-1; j > i; j--) {
-				if(arr[j] < arr[i] && desc[i] < desc[j]+1) {
-					desc[i] = desc[j] + 1;
-				}
+		int[] asc = new int[length];
+		
+		for(int i  = 0; i < length; i++) {
+			int max = 1;
+			for(int j = 0; j < i; j++) {
+				if(arr[j] < arr[i]) max = Math.max(asc[j]+1, max);
 			}
+			asc[i] = max;
 		}
 		
-		for(int i = 0; i < N; i++) {
-			max = Math.max(max, asc[i]+desc[i]-1);
+		int[] desc = new int[length];
+		
+		for(int i  = length-1; i >= 0; i--) {
+			int max = 1;
+			for(int j = length-1; j > i; j--) {
+				if(arr[j] < arr[i]) max = Math.max(desc[j]+1, max);
+			}
+			desc[i] = max;
 		}
+		
+		int max = 1;
+		for(int i = 0; i < length; i++) {
+			//System.out.println(asc[i] + " " + desc[i]);
+			max = Math.max(asc[i] + desc[i] - 1, max);
+		}
+		
+		System.out.println(max);
 	}
+	
 }
-
