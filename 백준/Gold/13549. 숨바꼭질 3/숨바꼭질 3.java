@@ -3,71 +3,71 @@ import java.util.*;
 
 public class Main {
 
-	
+	static StringBuilder str;
 	public static void main(String[] args) throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 
 		init(in);
 		
-		solve();
+		solve(in);			
 	}
 	
-	static final int size = 100_001;
-	static int N;
-	static int M;
-	static int[] visited;
+	static int start;
+	static int dest;
 	public static void init(BufferedReader in) throws IOException{
 		StringTokenizer tokens = new StringTokenizer(in.readLine());
-		N = Integer.parseInt(tokens.nextToken());
-		M = Integer.parseInt(tokens.nextToken());
-		visited = new int[size];
-		for(int i = 0; i < size; i++) {
-			visited[i] = Integer.MAX_VALUE;
-		}
+		
+		start = Integer.parseInt(tokens.nextToken());
+		dest = Integer.parseInt(tokens.nextToken());
 	}
 	
-	public static void solve() {
+	public static void solve(BufferedReader in) throws IOException {
 		
-		dijkstra(N, M);
+		int[] coord = new int[100_001];
 		
-	}
-	
-	public static void dijkstra(int start, int end) {
+		Arrays.fill(coord, -1);
 		
-		Queue<Point> q = new PriorityQueue<Point>(Comparator.comparing(Point::getValue));
+		PriorityQueue<Warp> q = new PriorityQueue<>();
 		
-		q.add(new Point(start, 0));
-		visited[start] = 0;
+		q.add(new Warp(start, 0));
+		coord[start] = 0;
 		
-		int min = 0;
 		while(!q.isEmpty()) {
-			Point cur = q.poll();
+			Warp cur = q.poll();
 			
-			if(0 < cur.coord && visited[cur.coord - 1] > cur.value + 1) {
-				q.add(new Point(cur.coord - 1, cur.value + 1));
-				visited[cur.coord - 1] = cur.value + 1;
+			//System.out.println(cur.dest + " " + cur.time);
+			
+			if(cur.dest == dest) break;
+			
+			if(cur.dest * 2 < coord.length && (coord[cur.dest * 2] == -1 || coord[cur.dest * 2] > cur.time)) {
+				q.add(new Warp(cur.dest * 2, cur.time));
+				coord[cur.dest * 2] = cur.time;
 			}
-			if(cur.coord < size - 1 && visited[cur.coord + 1] > cur.value + 1) {
-				q.add(new Point(cur.coord + 1, cur.value + 1));
-				visited[cur.coord + 1] = cur.value + 1;
+			if(cur.dest-1 >= 0 && coord[cur.dest-1] == -1) {
+				q.add(new Warp(cur.dest-1, cur.time+1));
+				coord[cur.dest -1] = cur.time+1;
 			}
-			if(cur.coord * 2 < size && visited[cur.coord * 2] > cur.value) {
-				q.add(new Point(cur.coord * 2, cur.value));
-				visited[cur.coord * 2] = cur.value;
+			if(cur.dest+1 < coord.length && coord[cur.dest+1] == -1) {
+				q.add(new Warp(cur.dest+1, cur.time+1));
+				coord[cur.dest+1] = cur.time+1;
 			}
 		}
 		
-		System.out.println(visited[end]);
+		System.out.println(coord[dest]);
 	}
 	
-	static class Point{
-		int coord;
-		int value;
-		public Point(int coord, int value) {
-			this.coord = coord;
-			this.value = value;
+	static class Warp implements Comparable<Warp>{
+		int dest;
+		int time;
+		public Warp(int d, int t) {
+			dest = d;
+			time = t;
 		}
 		
-		public int getValue() {return value;}
+		public int compareTo(Warp w) {
+			if(this.time < w.time) return -1;
+			else if(this.time > w.time) return 1;
+			else return 0;
+		}
 	}
 }
