@@ -65,6 +65,8 @@ public class Main {
 			for(int x = 0; x < width; x++) {
 				int size = Math.min(left[y][x], right[y][x]);
 				
+                if(size < max) continue;
+                
 				while(size > 0) {
 					int leftCheck = right[y+(size-1)][x-(size-1)];
 					int rightCheck = left[y+(size-1)][x+(size-1)];
