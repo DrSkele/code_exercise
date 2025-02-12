@@ -27,12 +27,12 @@ public class Main {
   
   public static void solve() {
     
-    int[] value = new int[length+1];
-    int[] size = new int[length+1];
+    long[] value = new long[length+1];
+    long[] size = new long[length+1];
     
     int left = 0;
     int right = 0;
-    int sum = food[0];
+    long sum = food[0];
     
     while(left <= right) {
       if(sum >= limit || right == length-1) {
@@ -55,10 +55,10 @@ public class Main {
     //   System.out.print(s + " ");
     // }
     
-    int[] dp = new int[length+1];
+    long[] dp = new long[length+1];
     
     for(int i = length-1; i >= 0; i--) {
-      dp[i] = Math.max(dp[i+1], dp[i+size[i]] + value[i]);
+      dp[i] = Math.max(dp[i+1], dp[i+(int)size[i]] + value[i]);
     }
     
     System.out.println(dp[0]);
