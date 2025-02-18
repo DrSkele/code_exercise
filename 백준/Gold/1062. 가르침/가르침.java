@@ -12,7 +12,6 @@ public class Main {
   static int nChar;
   static int[] chars;
   static int base;
-  static boolean[] visited;
   static int max;
   public static void input(BufferedReader in) throws IOException {
 	  StringTokenizer tokens = new StringTokenizer(in.readLine());
@@ -40,8 +39,6 @@ public class Main {
 	  base |= (1 << ('n' - 'a'));
 	  base |= (1 << ('t' - 'a'));
 	  
-	  visited = new boolean[1 << 26];
-	  
 	  max = 0;
   }
   
@@ -51,15 +48,13 @@ public class Main {
 		  return;
 	  }
 	  
-	  dfs(base, 5);
+	  dfs(0, base, 5);
 	  
 	  System.out.println(max);
   }
   
-  static void dfs(int mask, int cnt) {
+  static void dfs(int idx, int mask, int cnt) {
 	  
-	  visited[mask] = true;
-
 	  if(cnt == nChar) {
 		  
 		  int word = 0;
@@ -74,13 +69,12 @@ public class Main {
 	  }
 	  
 	  
-	  for(int i = 0; i < 26; i++) {
-		  if((mask & (1 << i)) > 0) continue;
+	  for(int i = idx; i < 26; i++) {
+		  if((mask & (1 << i)) != 0) continue;
 		  
-		  int next = mask | (1 << i);
-		  if(visited[next]) continue;
-		  
-		  dfs(next, cnt+1);
+		  mask |= (1 << i);
+		  dfs(i+1, mask, cnt+1);
+		  mask &= ~(1 << i);
 	  }
   }
 }
