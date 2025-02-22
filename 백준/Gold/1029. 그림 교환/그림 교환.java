@@ -34,13 +34,10 @@ public class Main {
 		int result = maxCnt[owner][visited];
 		if(result > 0) return result;
 		
-		boolean sold = false;
-		
 		for(int i = 0; i < num; i++) {
 			if(i == owner || matrix[owner][i] < price || (visited & (1 << i)) > 0) continue;
 			
 			result = Math.max(result, trade(i, visited | (1 << i), matrix[owner][i]) + 1);
-			sold = true;
 		}
 		
 		maxCnt[owner][visited] = result;
