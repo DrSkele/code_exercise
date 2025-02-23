@@ -26,7 +26,7 @@ public class Main {
 		long sum = 0;
 		
 		for(int i = 0; i < 20; i++) {
-			sum += bit[i] * (cnt - bit[i]) * (1L << i); 
+			sum += bit[i] * ((cnt - bit[i]) * (1 << i));
 		}
 		
 		System.out.println(sum);
