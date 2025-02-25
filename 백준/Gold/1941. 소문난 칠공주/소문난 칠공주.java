@@ -9,7 +9,8 @@ public class Main {
 	}
 	
 	static char[][] map;
-	static Set<Integer> set;
+	static boolean[] visited;
+	static int cnt;
 	static void input(BufferedReader in) throws IOException {
 		map = new char[5][5];
 		
@@ -17,7 +18,8 @@ public class Main {
 			map[i] = in.readLine().toCharArray();
 		}
 		
-		set = new HashSet<>();
+		visited = new boolean[1 << 25];
+		cnt = 0;
 	}
 	
 	static void solve() {
@@ -28,19 +30,22 @@ public class Main {
 			}
 		}
 		
-		System.out.println(set.size());
+		System.out.println(cnt);
 	}
 	
 	static int[] dx = { +1, 0, -1, 0 };
 	static int[] dy = { 0, +1, 0, -1 };
-	static void chillPrincess(int visited, int som, int yeon) {
+	static void chillPrincess(int mark, int som, int yeon) {
 		if(som + yeon == 7) {
-			if(!set.contains(visited)) set.add(visited);
+			if(!visited[mark]) {
+				visited[mark] = true;
+				cnt++;
+			}
 			return;
 		}
 		
 		for(int b = 0; b < 25; b++) {
-			if((visited & (1 << b)) == 0) continue;
+			if((mark & (1 << b)) == 0) continue;
 			
 			int x = b % 5;
 			int y = b / 5;
@@ -53,13 +58,13 @@ public class Main {
 				
 				int nextVisit = (1 << (ny * 5 + nx));
 				
-				if((visited & (nextVisit)) == nextVisit) continue;
+				if((mark & (nextVisit)) == nextVisit) continue;
 				
 				boolean isSom = map[ny][nx] == 'S';
 				
 				if(!isSom && yeon >= 3) continue;
 				
-				chillPrincess(visited | nextVisit, isSom ? som + 1 : som, isSom ? yeon : yeon + 1);
+				chillPrincess(mark | nextVisit, isSom ? som + 1 : som, isSom ? yeon : yeon + 1);
 			}
 		}
 	}
