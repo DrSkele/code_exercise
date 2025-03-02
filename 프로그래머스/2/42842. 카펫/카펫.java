@@ -4,18 +4,18 @@ class Solution {
         int width = 0;
         int height = 0;
         
-        int half = (int)Math.ceil(yellow/2f);
+        int half = (int)Math.ceil(brown/2f);
         
-        for(int vert = 1; vert <= half; vert++) {
-            if(yellow%vert > 0) continue;
+        for(int vert = half; vert >= 3; vert--) {
+            int hori = (brown - (vert*2) + 4)/2;
             
-            int hori = yellow/vert;
+            if(hori < vert) continue;
             
-            int edge = 2*(hori+2) + 2*(vert+2) - 4;
+            int inside = (hori-2) * (vert-2);
             
-            if(edge == brown){
-                width = hori+2;
-                height = vert+2;
+            if(inside == yellow){
+                width = hori;
+                height = vert;
                 break;
             }
         }
