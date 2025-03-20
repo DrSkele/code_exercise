@@ -24,12 +24,11 @@ public class Main {
 		guns = new int[nGun];
 		animals = new Animal[nAnimal];
 		
-		
 		tokens = new StringTokenizer(in.readLine());
 		for(int i = 0; i < nGun; i++) {
 			guns[i] = Integer.parseInt(tokens.nextToken());
 		}
-		
+		Arrays.sort(guns);
 		
 		for(int i = 0; i < nAnimal; i++) {
 			tokens = new StringTokenizer(in.readLine());
@@ -65,7 +64,7 @@ public class Main {
 			if(dist <= range) {
 				return true;
 			} else {
-				if(gun < x) {
+				if(gun <= x) {
 					left = mid + 1;
 				} else {
 					right = mid - 1;
