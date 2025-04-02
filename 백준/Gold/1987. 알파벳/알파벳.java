@@ -12,13 +12,14 @@ public class Main {
 	static int height;
 	static int width;
 	static char[][] matrix;
+	static int[][] visited;
 	static int max;
 	static void input(BufferedReader in) throws IOException {		
 		StringTokenizer tokens = new StringTokenizer(in.readLine());
 		height = Integer.parseInt(tokens.nextToken());
 		width = Integer.parseInt(tokens.nextToken());
 		matrix = new char[height][width];
-		
+		visited = new int[height][width];
 		for(int i = 0; i < height; i++) {
 			matrix[i] = in.readLine().toCharArray();
 		}
@@ -34,8 +35,10 @@ public class Main {
 	
 	static int[] dx = { +1, 0, -1, 0 };
 	static int[] dy = { 0, +1, 0, -1 };
-	static void dfs(int y, int x, int visited, int length) {
+	static void dfs(int y, int x, int check, int length) {
 		max = Math.max(max, length);
+		
+		visited[y][x] = check;
 		
 		for(int i = 0; i < 4; i++) {
 			int nx = x + dx[i];
@@ -45,9 +48,10 @@ public class Main {
 			
 			int idx = 1 << (matrix[ny][nx] - 'A');
 			
-			if((visited & idx) > 0) continue;
+			if((check & idx) > 0) continue;
+			if((check | idx) == visited[ny][nx]) continue;
 			
-			dfs(ny, nx, visited | idx, length+1);
+			dfs(ny, nx, check | idx, length+1);
 		}
 	}
 }
