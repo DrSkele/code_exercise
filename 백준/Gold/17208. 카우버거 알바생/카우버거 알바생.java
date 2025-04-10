@@ -45,12 +45,7 @@ public class Main {
 			}
 		}
 		
-		int max = 0;
-		for(int n : dp) {
-			max = Math.max(max, n);
-		}
-		
-		System.out.println(max);
+		System.out.println(dp[length-1]);
 	}
 	
 }
