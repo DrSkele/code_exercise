@@ -33,9 +33,6 @@ public class Main {
 	static void solve(){
 		int length = nBurger*1000 + nFry + 1;
 		int[] dp = new int[length];
-		Arrays.fill(dp, -1);
-		
-		dp[0] = 0;
 		
 		for(int i = 0; i < nOrder; i++) {
 			for(int b = nBurger; b >= burgers[i]; b--) {
@@ -43,7 +40,7 @@ public class Main {
 					int cur = b*1000 + f;
 					int idx = (b-burgers[i])*1000 + f-fries[i];
 					
-					if(dp[idx] >= 0) dp[cur] = Math.max(dp[cur], dp[idx] + 1);
+					dp[cur] = Math.max(dp[cur], dp[idx] + 1);
 				}
 			}
 		}
