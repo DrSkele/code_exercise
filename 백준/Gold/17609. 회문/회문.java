@@ -24,31 +24,9 @@ public class Main {
 		StringBuilder str = new StringBuilder();
 		
 		for(String line : strings) {
-			int left = 0;
-			int right = line.length()-1;
+			int cnt = isPalindrome(line, 0);
 			
-			int cnt = 0;
-			
-			while(left <= right) {
-				char front = line.charAt(left);
-				char back = line.charAt(right);
-				
-				if(front == back) {
-					left++;
-					right--;
-				} else if(cnt == 0) {
-					if((line.charAt(left+1) == back && isPalindrome(line.substring(left+1, right+1)) || 
-							front == line.charAt(right-1) && isPalindrome(line.substring(left, right))))  {
-						cnt = 1;
-					} else {
-						cnt = 2;
-					}
-					break;
-				} else {
-					cnt = 2;
-					break;
-				}
-			}
+			if(cnt > 2) cnt = 2;
 			
 			str.append(cnt).append("\n");
 		}
@@ -56,11 +34,13 @@ public class Main {
 		System.out.println(str.toString());
 	}
 	
-	static boolean isPalindrome(String line) {
+	static int isPalindrome(String line, int depth) {
+		if(depth >= 2) return depth;
+		
 		int left = 0;
 		int right = line.length()-1;
 		
-		while(left <= right) {
+		while(left < right) {
 			char front = line.charAt(left);
 			char back = line.charAt(right);
 			
@@ -68,9 +48,9 @@ public class Main {
 				left++;
 				right--;
 			} else {
-				return false;
+				return Math.min(isPalindrome(line.substring(left+1, right+1), depth+1), isPalindrome(line.substring(left, right), depth+1));
 			}
 		}
-		return true;
+		return depth;
 	}
 }
