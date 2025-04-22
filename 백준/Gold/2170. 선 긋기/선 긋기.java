@@ -40,8 +40,10 @@ public class Main {
 			if(left < cur.x) {
 				sum += left - right;
 				right = cur.x;
-			} 
-			left = Math.max(left, cur.y);
+				left = cur.y;
+			} else if(cur.y > left) {
+				left = cur.y;
+			}
 		}
 		
 		sum += left - right;
