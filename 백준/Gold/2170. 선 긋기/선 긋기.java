@@ -18,11 +18,7 @@ public class Main {
 			public int compare(Line l1, Line l2) {
 				if(l1.x < l2.x) return -1;
 				else if(l1.x > l2.x) return 1;
-				else {
-					if(l1.y < l2.y) return -1;
-					else if(l1.y > l2.y) return 1;
-					else return 0;
-				}
+				else return 0;
 			}
 		});
 		
