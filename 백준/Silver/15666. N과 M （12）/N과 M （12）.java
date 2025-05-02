@@ -13,7 +13,7 @@ public class Main {
     static int maxLength;
     static int[] arr;
     static int[] temp;
-    static Set<String> set;
+    static StringBuilder str;
     static void input(BufferedReader in) throws IOException {
     	StringTokenizer tokens = new StringTokenizer(in.readLine());
         length = Integer.parseInt(tokens.nextToken());
@@ -25,29 +25,29 @@ public class Main {
         }
         Arrays.sort(arr);
         temp = new int[maxLength];
-        set = new HashSet<>();
+        str = new StringBuilder();
     }
     
     static void solve() {
     	traverse(0, 0);
+    	System.out.println(str.toString());
     }
     
     static void traverse(int idx, int cnt) {
     	if(cnt == maxLength) {
-    		StringBuilder str = new StringBuilder();
     		for(int num : temp) {
     			str.append(num).append(' ');
     		}
-    		String seq = str.toString();
-    		if(!set.contains(seq)) {
-    			set.add(seq);
-    			System.out.println(str.toString());
-    		}
+    		str.append('\n');
     		return;
     	}
     	
+    	int prev = -1;
     	for(int i = idx; i < length; i++) {
+    		if(arr[i] == prev) continue;
+    		
     		temp[cnt] = arr[i];
+    		prev = arr[i];
     		traverse(i, cnt+1);
     	}
     }
