@@ -25,63 +25,67 @@ public class Main {
     static void solve() {
     	
     	boolean[] visited = new boolean[10_000];
-    	PriorityQueue<Command> pq = new PriorityQueue<>();
+    	int[] prev = new int[10_000];
+    	char[] cmd = new char[10_000];
+    	ArrayDeque<Integer> pq = new ArrayDeque<>();
     	
     	visited[from] = true;
-    	pq.add(new Command(from, ""));
-    	
-    	
+    	pq.add(from);
+    	prev[from] = -1;
     	
     	while(!pq.isEmpty()) {
-    		Command cur = pq.poll();
+    		int cur = pq.poll();
     		
-    		if(cur.num == to) {
-    			System.out.println(cur.str);
+    		if(cur == to) {
+    			StringBuilder str = new StringBuilder();
+    			int pivot = cur;
+    			while(pivot != from) {
+    				str.append(cmd[pivot]);
+    				pivot = prev[pivot];
+    			}
+    			str.reverse();
+    			System.out.println(str.toString());
+    			
     			break;
     		}
     		
     		// D
-    		int d = (cur.num * 2) % 10_000;
+    		int d = (cur * 2) % 10_000;
     		if(!visited[d]) {
     			visited[d] = true;
-    			pq.add(new Command(d, cur.str + "D"));
+    			prev[d] = cur;
+    			cmd[d] = 'D';
+    			pq.add(d);
     		}
     		
     		// S
-    		int s = cur.num > 0 ? cur.num-1 : 9999;
+    		int s = cur > 0 ? cur-1 : 9999;
     		if(!visited[s]) {
     			visited[s] = true;
-    			pq.add(new Command(s, cur.str + "S"));
+    			prev[s] = cur;
+    			cmd[s] = 'S';
+    			pq.add(s);
     		}
     		
     		// L
-    		int top = cur.num / 1_000;
-    		int l = ((cur.num * 10) % 10_000) + top;
+    		int top = cur / 1_000;
+    		int l = ((cur * 10) % 10_000) + top;
     		if(!visited[l]) {
     			visited[l] = true;
-    			pq.add(new Command(l, cur.str + "L"));
+    			prev[l] = cur;
+    			cmd[l] = 'L';
+    			pq.add(l);
     		}
     		
-    		int bottom = cur.num % 10;
-    		int r = (cur.num / 10) + bottom * 1_000;
+    		// R
+    		int bottom = cur % 10;
+    		int r = (cur / 10) + bottom * 1_000;
     		if(!visited[r]) {
     			visited[r] = true;
-    			pq.add(new Command(r, cur.str + "R"));
+    			prev[r] = cur;
+    			cmd[r] = 'R';
+    			pq.add(r);
     		}
-    	}
-    }
-    
-    static class Command implements Comparable<Command>{
-    	int num;
-    	String str;
-    	
-    	public Command(int num, String str) {
-    		this.num = num;
-    		this.str = str;
-    	}
-    	
-    	public int compareTo(Command other) {
-    		return Integer.compare(this.str.length(), other.str.length());
     	}
     }
 }
