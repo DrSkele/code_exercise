@@ -4,39 +4,29 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer tokens = new StringTokenizer(in.readLine());
-        int holes = Integer.parseInt(tokens.nextToken());
-        int length = Integer.parseInt(tokens.nextToken());
+        StringTokenizer st = new StringTokenizer(in.readLine());
         
-        ArrayList<Integer> arr = new ArrayList<>();
+        int N = Integer.parseInt(st.nextToken());
+        int L = Integer.parseInt(st.nextToken());
         
-        tokens = new StringTokenizer(in.readLine());
-        for(int i = 0; i < holes; i++) {
-            arr.add(Integer.parseInt(tokens.nextToken()));
+        int[] locations = new int[N];
+        st = new StringTokenizer(in.readLine());
+        for (int i = 0; i < N; i++) {
+            locations[i] = Integer.parseInt(st.nextToken());
         }
-        Collections.sort(arr);
         
-        int cnt = 0;
-        int start = -1;
+        Arrays.sort(locations);
         
-        for(int i = 0; i < arr.size(); i++) {
-            if(start == -1) {
-              start = arr.get(i);
-              continue;
-            }
-          
-            int gap = arr.get(i) - start + 1;
-            if(gap == length) {
-              cnt++;
-              start = -1;
-            } else if(gap > length) {
-              cnt++;
-              start = arr.get(i);
+        int tapeCount = 0;
+        int currentCoverageRange = 0;
+
+        for (int pos : locations) {
+            if (pos > currentCoverageRange) {
+                tapeCount++;
+                currentCoverageRange = pos + L - 1;
             }
         }
         
-        if(start != -1) cnt++;
-        
-        System.out.println(cnt);
+        System.out.println(tapeCount);
     }
 }
