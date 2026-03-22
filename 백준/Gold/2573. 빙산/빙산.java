@@ -35,7 +35,6 @@ public class Main {
         
         int iceBerg = 0;
         visited = new Boolean[height][width];
-        diff = new Integer[height][width];
         
         do {
             iceBerg = countIceBerg();
@@ -69,7 +68,6 @@ public class Main {
         return cnt;
     }
     
-    static Integer[][] diff; 
     static int[] dy = { +1, 0, -1, 0 };
     static int[] dx = { 0, +1, 0, -1 };
     static void meltIce(int oy, int ox) {
@@ -77,7 +75,6 @@ public class Main {
         
         queue.add(new int[]{oy, ox});
         visited[oy][ox] = true;
-        resetMatrix(diff, 0);
         
         while(!queue.isEmpty()) {
             int[] cur = queue.poll();
@@ -101,13 +98,7 @@ public class Main {
                 visited[ny][nx] = true;
             }
             
-            diff[y][x] = water;
-        }
-        
-        for(int i = 0; i < height; i++) {
-            for(int j = 0; j < width; j++) {
-                matrix[i][j] = Math.max(0, matrix[i][j] - diff[i][j]);
-            }
+            matrix[y][x] = Math.max(0, matrix[y][x] - water);
         }
     }
 }
