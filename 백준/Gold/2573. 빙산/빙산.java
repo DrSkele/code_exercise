@@ -29,12 +29,11 @@ public class Main {
         }
     }
     
-    static Boolean[][] visited;
+    static boolean[][] visited;
     public static void solve() {
         int cnt = -1;
         
         int iceBerg = 0;
-        visited = new Boolean[height][width];
         
         do {
             iceBerg = countIceBerg();
@@ -53,7 +52,7 @@ public class Main {
     
     static int countIceBerg() {
         int cnt = 0;
-        resetMatrix(visited, false);
+        visited = new boolean[height][width];
         
         for(int i = 0; i < height; i++) {
             for(int j = 0; j < width; j++) {
