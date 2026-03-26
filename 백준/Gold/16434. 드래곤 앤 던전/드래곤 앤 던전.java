@@ -5,81 +5,41 @@ public class Main {
     public static void main(String[] args) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         
-        input(in);
-        solve();
-    }
-    
-    static int length;
-    static int initialAtk;
-    static int [][] dungeon;
-    static void input(BufferedReader in) throws IOException {
         StringTokenizer tokens = new StringTokenizer(in.readLine());
         
-        length = Integer.parseInt(tokens.nextToken());
-        initialAtk = Integer.parseInt(tokens.nextToken());
-        
-        dungeon = new int[length][3];
+        int length = Integer.parseInt(tokens.nextToken());
+        long atk = Long.parseLong(tokens.nextToken());
+        long health = 0;
+        long totalDmg = 0;
         
         for(int i = 0; i < length; i++) {
             tokens = new StringTokenizer(in.readLine());
             
-            for(int j = 0; j < 3; j++) {
-                dungeon[i][j] = Integer.parseInt(tokens.nextToken());
-            }
-        }
-    }
-    
-    static void solve() {
-        long left = 1;
-        long right = Long.MAX_VALUE;
-        long answer = 0;
-        
-        while(left <= right) {
-            long mid = left + (right - left)/2;
+            String type = tokens.nextToken();
             
-            if(tryDungeon(initialAtk, mid)) {
-                answer = mid;
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
-        }
-        
-        System.out.println(answer);
-    }
-    
-    static Boolean tryDungeon(long atk, long maxHp) {
-        long currentHp = maxHp;
-        
-        for(int i = 0; i < length; i++) {
-            int type = dungeon[i][0];
-            
-            if(type == 1) {
+            if(type.equals("1")) {
                 // monster
-                int monsterAtk = dungeon[i][1];
-                int monsterHp = dungeon[i][2];
+                int monsterAtk = Integer.parseInt(tokens.nextToken());
+                int monsterHp = Integer.parseInt(tokens.nextToken());
                 
                 long turns = monsterHp / atk;
                 if(monsterHp % atk == 0) turns--;
                 
                 long dmgTaken = monsterAtk * turns;
                 
-                currentHp -= dmgTaken;
-                // dead
-                if(currentHp <= 0) {
-                    return false;
-                }
+                totalDmg += dmgTaken;
+                
+                health = Math.max(health, totalDmg);
             } else {
                 // potion
-                int buff = dungeon[i][1];
-                int heal = dungeon[i][2];
+                int buff = Integer.parseInt(tokens.nextToken());
+                int heal = Integer.parseInt(tokens.nextToken());
                 
                 atk += buff;
-                currentHp += heal;
-                if(currentHp > maxHp) currentHp = maxHp;
+                totalDmg = Math.max(0, totalDmg - heal);
             }
         }
         
-        return true;
+        System.out.println(health+1);
     }
 }
